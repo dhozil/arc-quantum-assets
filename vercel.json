@@ -3,12 +3,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
-  "outputDirectory": "dist",
-  "nodeVersion": "18",
-  "build": {
-    "env": {
-      "VITE_API_URL": "@api-url"
-    }
-  }
+  "outputDirectory": "dist"
 }
 
