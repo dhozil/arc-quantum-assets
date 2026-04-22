@@ -21,7 +21,7 @@ const WalletConnect = () => {
 
   const getNetworkName = (chainId: string) => {
     const networks: { [key: string]: string } = {
-      '0x4cf2e': 'Arc Network',
+      '0x4cef52': 'Arc Network',
       '0x1': 'Ethereum',
       '0x89': 'Polygon',
       '0xa86a': 'Avalanche',
@@ -34,9 +34,9 @@ const WalletConnect = () => {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0x4cf2e',
+          chainId: '0x4cef52',
           chainName: 'Arc Network',
-          nativeCurrency: { name: 'ARC', symbol: 'ARC', decimals: 18 },
+          nativeCurrency: { name: 'USDC', symbol: 'USDC', decimals: 18 },
           rpcUrls: ['https://rpc.testnet.arc.network'],
           blockExplorerUrls: ['https://explorer.arc.testnet.io']
         }]
@@ -86,13 +86,14 @@ const WalletConnect = () => {
     setNetworkName("Unknown")
   }
 
-  const updateWalletInfo = async () => {
-    if (window.ethereum && address) {
+  const updateWalletInfo = async (addr?: string) => {
+    const targetAddress = addr || address
+    if (window.ethereum && targetAddress) {
       try {
         const provider = new ethers.BrowserProvider(window.ethereum)
-        const bal = await provider.getBalance(address)
+        const bal = await provider.getBalance(targetAddress)
         setBalance(ethers.formatEther(bal))
-        
+
         const network = await provider.getNetwork()
         setNetworkName(getNetworkName(network.chainId.toString(16)))
       } catch (error) {
@@ -108,7 +109,7 @@ const WalletConnect = () => {
         .then(async (accounts: string[]) => {
           if (accounts.length > 0) {
             setAddress(accounts[0])
-            await updateWalletInfo()
+            await updateWalletInfo(accounts[0])
           }
         })
         
@@ -144,9 +145,7 @@ const WalletConnect = () => {
             <Circle size={8} className="text-green-400 fill-green-400" />
             <span className="text-sm font-semibold">{formatAddress(address)}</span>
             <span className="text-xs text-gray-400">|</span>
-            <span className="text-xs text-gray-400">{parseFloat(balance).toFixed(4)} ARC</span>
-            <span className="text-xs text-gray-400">|</span>
-            <span className="text-xs text-gray-400">{networkName}</span>
+            <span className="text-xs text-gray-400">{parseFloat(balance).toFixed(4)} USDC</span>
           </div>
           <motion.button
             onClick={disconnectWallet}
