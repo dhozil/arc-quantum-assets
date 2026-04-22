@@ -87,10 +87,10 @@ function App() {
             params: [
               {
                 chainId: ARC_CHAIN_ID,
-                chainName: 'Arc Testnet',
+                chainName: 'Arc Network',
                 nativeCurrency: {
-                  name: 'ARC',
-                  symbol: 'ARC',
+                  name: 'USDC',
+                  symbol: 'USDC',
                   decimals: 18,
                 },
                 rpcUrls: ['https://rpc.testnet.arc.network'],
