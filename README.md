@@ -2,6 +2,10 @@
 
 A visually stunning Real-World Asset (RWA) tokenization platform built for Arc Blockchain testnet. Features unique quantum-inspired UI with hexagonal buttons, particle effects, radial navigation, and 3D asset visualizations.
 
+**Now with Post-Quantum Cryptography Support!** 🛡️
+
+Leveraging Arc's new post-quantum signature scheme (April 2026) to provide quantum-resistant escrow and vault services for long-term asset storage.
+
 ## 🎨 Unique Design Features
 
 - **Hexagonal UI Elements**: All buttons and cards use hexagonal shapes with quantum-inspired gradients
@@ -72,6 +76,26 @@ Factory contract to deploy new RWA tokens:
 - Track all deployed tokens
 - Query deployed token addresses
 
+### QuantumEscrow.sol ⚡ NEW
+Post-quantum resistant escrow contract for long-term holdings:
+- Time-locked escrow with release conditions
+- Quantum-resistant wallet support (opt-in)
+- Beneficiary-controlled release
+- Cancellation before release time
+- Auto-expiration after 30 days past release time
+- Platform fee mechanism (0.5%)
+- Metadata support (IPFS integration)
+- Use cases: Real estate escrow, inheritance planning, business contracts
+
+### QuantumVault.sol ⚡ NEW
+Post-quantum resistant vault for institutional storage:
+- Multi-tier vault system (Standard, Institutional, Sovereign)
+- Quantum-resistant wallet auto-enable for deposits > 1M USDC
+- Time-based fee structure (tier-specific annual fees)
+- Optional lock periods
+- Fee calculator
+- Use cases: Pension funds, endowments, sovereign wealth funds
+
 ## 🎯 Sample Assets
 
 The dashboard includes sample RWA assets:
@@ -84,6 +108,18 @@ The dashboard includes sample RWA assets:
 *Demo assets have fake contract addresses for testing purposes. Only QT-BOND has a real deployed contract.*
 
 ## ✨ Key Features
+
+### Post-Quantum Security ⚡ NEW
+- Quantum-resistant escrow for long-term holdings (30 days to 10 years)
+- Multi-tier vault system for institutional storage
+- Opt-in quantum-resistant wallets
+- Protection against "harvest now, decrypt later" attacks
+- Future-proof for Q-Day (estimated 2030)
+
+### Navigation System
+- Three main views: Assets, Escrow, Vault
+- Seamless switching between RWA trading and quantum-secure storage
+- Unified quantum-inspired design across all views
 
 ### Category Filter
 - Filter assets by category: All Assets, Real Estate, Energy, Commodity, Treasury
@@ -122,6 +158,22 @@ The dashboard includes sample RWA assets:
 - Dynamic updates based on selected asset
 
 ## 🎨 UI Components
+
+### EscrowPage ⚡ NEW
+Quantum escrow interface with:
+- Create new escrow with beneficiary, amount, and release date
+- Quantum-resistant wallet opt-in
+- Escrow list with status tracking
+- Release/cancel functionality
+- Real-time countdown to release
+
+### VaultPage ⚡ NEW
+Quantum vault interface with:
+- Three-tier vault selection (Standard, Institutional, Sovereign)
+- Deposit creation with lock periods
+- Automatic quantum-enablement for large deposits
+- Fee calculator
+- Deposit management with lock status
 
 ### ParticleBackground
 Canvas-based particle system with:
@@ -227,6 +279,9 @@ forge script script/Deploy.s.sol --rpc-url https://rpc.testnet.arc.network --bro
 - [ ] Mobile app version
 - [ ] Advanced trading features (limit orders, stop-loss)
 - [ ] Multi-chain support
+- [ ] Quantum-resistant wallet integration with Arc's post-quantum signature scheme
+- [ ] Institutional compliance features (KYC/AML integration)
+- [ ] Automated escrow templates for common use cases
 
 ## 🎯 Arc Testnet Program
 

@@ -26,7 +26,7 @@ module.exports = {
     customChains: [
       {
         network: "arcTestnet",
-        chainId: 421614,
+        chainId: 5042002,
         urls: {
           apiURL: "https://testnet.arcscan.app/api",
           browserURL: "https://testnet.arcscan.app"

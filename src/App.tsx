@@ -10,6 +10,8 @@ import AdminPanel from './components/AdminPanel'
 import ViewAllAssets from './components/ViewAllAssets'
 import AssetInteraction from './components/AssetInteraction'
 import DashboardStats from './components/DashboardStats'
+import EscrowPage from './components/EscrowPage'
+import VaultPage from './components/VaultPage'
 import { ToastProvider } from './contexts/ToastContext'
 import { RWA_CONTRACT_ADDRESS } from './lib/contracts'
 
@@ -24,6 +26,7 @@ function App() {
   const [isViewAllAssetsOpen, setIsViewAllAssetsOpen] = useState(false)
   const [wrongNetwork, setWrongNetwork] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
+  const [currentView, setCurrentView] = useState<'assets' | 'escrow' | 'vault'>('assets')
 
   const ASSET_CATEGORIES = [
     { id: 'ALL', name: 'All Assets', icon: '🌐' },
@@ -207,7 +210,10 @@ function App() {
         {!isWalletConnected ? (
           <>
             <QuantumHeader />
-            <LandingPage />
+            <LandingPage onNavigate={(view) => {
+              setIsWalletConnected(true)
+              setCurrentView(view)
+            }} />
           </>
         ) : (
           <>
@@ -221,14 +227,46 @@ function App() {
             ) : (
               <main className="container mx-auto px-4 py-8">
                 <div className="space-y-8">
-                  <div className="text-center mb-12">
-                    <h1 className="text-6xl font-bold mb-4 text-glow animate-float">
-                      Quantum Asset Hub
-                    </h1>
-                    <p className="text-xl text-gray-300">
-                      Tokenize Reality. Own the Future.
-                    </p>
+                  {/* Navigation */}
+                  <div className="flex justify-center gap-4 mb-8">
+                    <HexButton
+                      variant={currentView === 'assets' ? 'primary' : 'secondary'}
+                      onClick={() => setCurrentView('assets')}
+                    >
+                      Assets
+                    </HexButton>
+                    <HexButton
+                      variant={currentView === 'escrow' ? 'primary' : 'secondary'}
+                      onClick={() => setCurrentView('escrow')}
+                    >
+                      Escrow
+                    </HexButton>
+                    <HexButton
+                      variant={currentView === 'vault' ? 'primary' : 'secondary'}
+                      onClick={() => setCurrentView('vault')}
+                    >
+                      Vault
+                    </HexButton>
                   </div>
+
+                  {currentView === 'assets' && (
+                    <>
+                      <div className="text-center mb-12">
+                        <h1 className="text-6xl font-bold mb-4 text-glow animate-float">
+                          Quantum Asset Hub
+                        </h1>
+                        <p className="text-xl text-gray-300">
+                          Tokenize Reality. Own the Future.
+                        </p>
+                      </div>
+                    </>
+                  )}
+
+                  {currentView === 'escrow' && <EscrowPage />}
+                  {currentView === 'vault' && <VaultPage />}
+
+                  {currentView === 'assets' && (
+                    <>
 
                   <DashboardStats 
                     contractAddress={selectedAssetForInteraction?.contractAddress}
@@ -308,6 +346,8 @@ function App() {
                       View All Assets
                     </HexButton>
                   </div>
+                  </>
+                  )}
                 </div>
               </main>
             )}

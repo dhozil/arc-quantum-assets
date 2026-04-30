@@ -1,6 +1,9 @@
 export const RWA_CONTRACT_ADDRESS = import.meta.env.VITE_RWA_CONTRACT || "0xe6c03C961944cc233a6a149d20D35e7Be7957Ab0";
 export const FACTORY_CONTRACT_ADDRESS = import.meta.env.VITE_FACTORY_CONTRACT || "0x412bfE938761528B3f282dba97Fb4105204181BE";
 export const MARKETPLACE_CONTRACT_ADDRESS = import.meta.env.VITE_MARKETPLACE_CONTRACT || "0xEdD654301aB1fa591b4d502E18A7275cC3863896";
+export const ESCROW_CONTRACT_ADDRESS = import.meta.env.VITE_ESCROW_CONTRACT || "";
+export const VAULT_CONTRACT_ADDRESS = import.meta.env.VITE_VAULT_CONTRACT || "";
+export const USDC_CONTRACT_ADDRESS = "0x0A5222d502afFc8a86aBC84802b4021a6464C63f"; // Mock USDC on Arc testnet
 
 // QuantumRWA ABI (simplified for essential functions)
 export const RWA_ABI = [

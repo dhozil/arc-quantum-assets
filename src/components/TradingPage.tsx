@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, TrendingUp, TrendingDown, DollarSign, Clock, Activity, X, AlertCircle } from 'lucide-react'
-import { MARKETPLACE_CONTRACT_ADDRESS, MARKETPLACE_ABI, RWA_CONTRACT_ADDRESS, RWA_ABI } from '../lib/contracts'
+import { MARKETPLACE_CONTRACT_ADDRESS, MARKETPLACE_ABI, RWA_CONTRACT_ADDRESS, RWA_ABI, USDC_CONTRACT_ADDRESS } from '../lib/contracts'
 import { ethers } from 'ethers'
 import PriceChart from './PriceChart'
 
@@ -110,14 +110,15 @@ const TradingPage = ({ asset, onBack }: TradingPageProps) => {
 
   const loadBalance = async () => {
     try {
-      const rwa = await getRWAContract(asset.contractAddress)
-      if (!rwa) return
+      // Show USDC balance for trading
+      const usdc = await getRWAContract(USDC_CONTRACT_ADDRESS)
+      if (!usdc) return
 
       const accounts = await window.ethereum.request({ method: 'eth_accounts' })
       if (!accounts || accounts.length === 0) return
       
-      const bal = await rwa.balanceOf(accounts[0])
-      setUserBalance(ethers.formatEther(bal))
+      const bal = await usdc.balanceOf(accounts[0])
+      setUserBalance(ethers.formatUnits(bal, 6)) // USDC uses 6 decimals
     } catch (error) {
       console.error('Error loading balance:', error)
       setUserBalance('0')
@@ -137,10 +138,26 @@ const TradingPage = ({ asset, onBack }: TradingPageProps) => {
       const pricePerToken = ethers.parseUnits(price || '1', 6)
       const tokenAddress = asset.contractAddress || RWA_CONTRACT_ADDRESS
 
-      const rwa = await getRWAContract(tokenAddress)
-      if (!rwa) return
+      // For SELL: User needs RWA tokens
+      if (tab === 'sell') {
+        const rwa = await getRWAContract(tokenAddress)
+        if (!rwa) return
 
-      await rwa.approve(MARKETPLACE_CONTRACT_ADDRESS, tokenAmount)
+        // Check RWA token balance
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' })
+        const balance = await rwa.balanceOf(accounts[0])
+        
+        if (balance < tokenAmount) {
+          alert(`Insufficient RWA token balance. You have ${ethers.formatEther(balance)} tokens but need ${amount}`)
+          return
+        }
+
+        // Approve RWA token transfer
+        alert('Please approve RWA token transfer in your wallet...')
+        const approveTx = await rwa.approve(MARKETPLACE_CONTRACT_ADDRESS, tokenAmount)
+        await approveTx.wait()
+        console.log('RWA token approved')
+      }
 
       const tx = await marketplace.createOrder(tokenAddress, tokenAmount, pricePerToken)
       await tx.wait()
@@ -165,6 +182,28 @@ const TradingPage = ({ asset, onBack }: TradingPageProps) => {
         alert('Please connect wallet first')
         return
       }
+
+      // Get order details to calculate USDC needed
+      const order = await marketplace.getOrder(orderId)
+      const usdcNeeded = order.totalPrice
+
+      // Check USDC balance
+      const usdc = await getRWAContract(USDC_CONTRACT_ADDRESS)
+      if (!usdc) return
+
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' })
+      const usdcBalance = await usdc.balanceOf(accounts[0])
+      
+      if (usdcBalance < usdcNeeded) {
+        alert(`Insufficient USDC balance. You need ${ethers.formatUnits(usdcNeeded, 6)} USDC`)
+        return
+      }
+
+      // Approve USDC transfer
+      alert('Please approve USDC transfer in your wallet...')
+      const approveTx = await usdc.approve(MARKETPLACE_CONTRACT_ADDRESS, usdcNeeded)
+      await approveTx.wait()
+      console.log('USDC approved')
 
       const tx = await marketplace.fillOrder(orderId)
       await tx.wait()

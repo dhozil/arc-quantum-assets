@@ -1,37 +1,43 @@
 import { motion } from 'framer-motion'
 import { Zap, Shield, TrendingUp, Lock, Globe, Zap as Bolt } from 'lucide-react'
 
-const LandingPage = () => {
+const LandingPage = ({ onNavigate }: { onNavigate?: (view: 'assets' | 'escrow' | 'vault') => void }) => {
   const features = [
     {
       icon: <Zap size={32} />,
       title: 'Instant Settlement',
-      description: 'Sub-second deterministic finality powered by Arc blockchain architecture'
+      description: 'Sub-second deterministic finality powered by Arc blockchain architecture',
+      action: 'assets'
     },
     {
       icon: <Shield size={32} />,
       title: 'Privacy-First',
-      description: 'Opt-in privacy controls for sensitive transactions while maintaining auditability'
+      description: 'Opt-in privacy controls for sensitive transactions while maintaining auditability',
+      action: 'assets'
     },
     {
       icon: <TrendingUp size={32} />,
       title: 'Stable Fees',
-      description: 'Predictable USDC-denominated fees with no gas token volatility'
+      description: 'Predictable USDC-denominated fees with no gas token volatility',
+      action: 'assets'
     },
     {
       icon: <Lock size={32} />,
-      title: 'Secure',
-      description: 'Post-quantum security and enterprise-grade protection for your assets'
+      title: 'Quantum Escrow',
+      description: 'Post-quantum secure escrow for long-term holdings with time-locked release',
+      action: 'escrow'
     },
     {
       icon: <Globe size={32} />,
-      title: 'Global Access',
-      description: '24/7 cross-border payments and payouts with instant settlement'
+      title: 'Quantum Vault',
+      description: 'Multi-tier institutional vault with automatic quantum-resistance for large deposits',
+      action: 'vault'
     },
     {
       icon: <Bolt size={32} />,
       title: 'Quantum Speed',
-      description: 'High-frequency trading support with real-time risk management'
+      description: 'High-frequency trading support with real-time risk management',
+      action: 'assets'
     }
   ]
 
@@ -108,12 +114,13 @@ const LandingPage = () => {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="glass-effect rounded-2xl p-6 hover:neon-glow transition-all duration-300"
+              className="glass-effect rounded-2xl p-6 hover:neon-glow transition-all duration-300 cursor-pointer"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05 }}
+              onClick={() => onNavigate?.(feature.action as 'assets' | 'escrow' | 'vault')}
             >
               <div className="w-16 h-16 hexagon quantum-gradient flex items-center justify-center mb-4 text-white">
                 {feature.icon}
