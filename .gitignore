@@ -35,3 +35,11 @@ yarn-error.log*
 # Misc
 .cache/
 .parcel-cache/
+
+# Hardhat
+/cache
+/artifacts
+/typechain
+/typechain-types
+/coverage.json
+ignition/deployments/chain-31337
